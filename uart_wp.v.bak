@@ -1,0 +1,30 @@
+module uart_wp(
+	input MAX_CLK1_50,
+	input [9:0] SW,
+	input [1:0] KEY,
+	output [9:0] LEDR,
+	output [6:0] HEX0, HEX1, HEX2, HEX3
+);
+
+wire tx_out;
+wire rx_out;
+
+uart_rx WRAPPER1(
+	.i_Clock(MAX_CLK1_50),
+	.i_Tx_DV(KEY[0]),
+	.i_Tx_Byte(SW[9:0]),
+	.o_Tx_Active(LEDR[0]),
+	.o_Tx_Serial(tx_out),
+	.o_Tx_Done(LEDR[1])
+
+);
+
+uart_rx WRAPPER2(
+	.i_Clock(MAX_CLK1_50),
+	.i_Rx_Serial(tx_out),
+	.o_Rx_DV(LEDR[2]),
+	.o_Rx_Byte(rx_out)
+
+);
+
+endmodule 
